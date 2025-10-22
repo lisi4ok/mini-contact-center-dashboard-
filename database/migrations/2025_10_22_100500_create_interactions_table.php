@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('interactions', function (Blueprint $table) {
             $table->id();
-            $table->foreign('contact_id')->references('id')->on('contacts');
+            $table->foreignId('contact_id')->constrained()->cascadeOnDelete();
             $table->string('type');
             $table->text('note')->nullable();
-            $table->timestamp('read_at')->nullable();
+            $table->timestamp('timestamp')->nullable();
             $table->timestamps();
         });
     }

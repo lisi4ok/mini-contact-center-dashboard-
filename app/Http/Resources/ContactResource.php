@@ -7,12 +7,17 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContactResource extends JsonResource
 {
+    public function toArray(Request $request): array
+    {
+        return parent::toArray($request);
+    }
+
     /**
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray2(Request $request): array
     {
         return [
             //'id' => $this->id,
@@ -20,6 +25,8 @@ class ContactResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'company' => $this->company ?? null,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

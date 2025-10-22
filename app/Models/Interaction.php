@@ -14,8 +14,8 @@ class Interaction extends Model
     protected $fillable = [
         'contact_id',
         'type',
-        'timestamp',
         'note',
+        'timestamp',
     ];
 
     public function contact(): BelongsTo
