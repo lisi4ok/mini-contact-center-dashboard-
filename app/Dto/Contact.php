@@ -3,14 +3,16 @@
 namespace App\Dto;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 readonly class Contact
 {
     public function __construct(
         public string $name,
         public string $email,
-        public int $phone,
+        public string $phone,
         public ?string $company = null,
+        public null|array|Collection $interactions = null,
     ) {
     }
 
@@ -21,6 +23,7 @@ readonly class Contact
             email: $data['email'],
             phone: $data['phone'],
             company: $data['company'] ?? null,
+            interactions: $data['interactions'] ?? null,
         );
     }
 
@@ -31,6 +34,7 @@ readonly class Contact
             email: $request->input('email'),
             phone: $request->input('phone'),
             company: $request->input('company'),
+            interactions: $request->input('interactions'),
         );
     }
 }
