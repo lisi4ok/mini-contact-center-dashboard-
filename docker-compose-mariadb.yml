@@ -1,0 +1,42 @@
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - ./data/mariadb:/var/lib/mariadb
+    environment:
+      MARIADB_HOST: ${DB_HOST}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MARIADB_DATABASE: ${DB_DATABASE}
+      MARIADB_USER: ${DB_USERNAME}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - mariadb-network
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    ports:
+      - "${PHPMYADMIN_PORT}:${PHPMYADMIN_PORT}"
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: ${DB_PORT}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MEMORY_LIMIT: '-1'
+      MAX_EXECUTION_TIME: 0
+      APACHE_PORT: ${PHPMYADMIN_PORT}
+      UPLOAD_LIMIT: '10G'
+    depends_on:
+      - mariadb
+    networks:
+      - mariadb-network
+
+networks:
+  mariadb-network:
+    driver: bridge
