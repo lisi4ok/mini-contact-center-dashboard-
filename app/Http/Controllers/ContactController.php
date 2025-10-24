@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Dto\Contact as ContactDto;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Models\Contact;
 use App\Services\ContactService;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -80,8 +82,7 @@ class ContactController extends Controller
 
     public function create()
     {
-        return Inertia::render('contacts/form', [
-        ]);
+        return Inertia::render('contacts/create');
     }
 
     /**
@@ -89,29 +90,14 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        try {
-            $categoryImagePath = null;
-
-            if ($request->hasFile('image')) {
-                $categoryImagePath = $request->file('image')->store('categories', 'public');
-            }
-
-            $category = Contact::create([
-                'name'        => $request->name,
-                'slug'        => Str::slug($request->name),
-                'description' => $request->description,
-                'image'       => $categoryImagePath,
-            ]);
-
-            if ($category) {
-                return redirect()->route('categories.index')->with('success', 'Category created successfully.');
-            }
-
-            return redirect()->back()->with('error', 'Unable to create category. Please try again.');
-
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to create category');
+        $dto = ContactDto::fromArray($request->validated());
+        $contact = $this->contactService->create($dto);
+        if ($contact) {
+            return redirect()->route('contacts.index')
+                ->with('success', 'Contact created successfully.');
         }
+
+        return redirect()->back()->with('error', 'Failed to create contact.');
     }
 
     /**
@@ -166,12 +152,12 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Contact $contact)
     {
         try {
-            if ($category) {
-                $category->delete();
-                return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+            if ($contact) {
+                $contact->delete();
+                return redirect()->route('contacts.index')->with('success', 'Category deleted successfully.');
             }
 
         } catch (Exception $e) {

@@ -9,7 +9,7 @@ trait ContactValidationRules
      *
      * @return array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
      */
-    protected function rules(): array
+    public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],
