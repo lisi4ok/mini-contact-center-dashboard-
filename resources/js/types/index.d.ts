@@ -33,9 +33,15 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export interface FlashMessage {
+    success?: string;
+    error?: string;
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };
+    flash?: FlashMessage;
     auth: Auth;
     sidebarOpen: boolean;
     [key: string]: unknown;

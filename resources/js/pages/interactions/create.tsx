@@ -50,19 +50,21 @@ export default function CreateInteraction({ contacts }: { contacts: Contact[] })
                             <>
                                 <div className="grid gap-2">
                                     <Label htmlFor="name">Contact</Label>
-                                    <Select name="contact_id">
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Select a Contact" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Contact</SelectLabel>
-                                                {contacts.length && contacts.map((contact: Contact) =>
-                                                    <SelectItem value={contact.id.toString()}>{contact.name}</SelectItem>
-                                                )}
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                    {contacts.length >= 1 && (
+                                        <Select name="contact_id">
+                                            <SelectTrigger className="w-[180px]">
+                                                <SelectValue placeholder="Select a Contact" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectLabel>Contact</SelectLabel>
+                                                    {contacts.map((contact: Contact) =>
+                                                        <SelectItem value={contact.id.toString()}>{contact.name}</SelectItem>
+                                                    )}
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    )}
 
                                     <InputError
                                         className="mt-2"

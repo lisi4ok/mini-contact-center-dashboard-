@@ -39,7 +39,7 @@ export default function EditInteraction({ contacts, interaction }: { contacts: C
 
                 <div className="space-y-6">
                     <HeadingSmall
-                        title="Edit Interaction"
+                        title={"Edit Interaction #" + interaction.id}
                         description="Edit Interaction - type, note contact"
                     />
 
@@ -54,24 +54,26 @@ export default function EditInteraction({ contacts, interaction }: { contacts: C
                             <>
                                 <div className="grid gap-2">
                                     <Label htmlFor="name">Contact</Label>
-                                    <Select name="contact_id"
-                                            value={contact}
-                                            onValueChange={(value) => {
-                                                setContact(value);
-                                            }}
-                                    >
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Select a Contact" defaultValue={interaction.contact_id} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Contact</SelectLabel>
-                                                {contacts.length && contacts.map((contact: Contact) =>
-                                                    <SelectItem value={contact.id.toString()}>{contact.name}</SelectItem>
-                                                )}
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                    {contacts.length >= 1 && (
+                                        <Select name="contact_id"
+                                                value={contact}
+                                                onValueChange={(value) => {
+                                                    setContact(value);
+                                                }}
+                                        >
+                                            <SelectTrigger className="w-[180px]">
+                                                <SelectValue placeholder="Select a Contact" defaultValue={interaction.contact_id} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectLabel>Contact</SelectLabel>
+                                                    {contacts.length && contacts.map((contact: Contact) =>
+                                                        <SelectItem value={contact.id.toString()}>{contact.name}</SelectItem>
+                                                    )}
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    )}
 
                                     <InputError
                                         className="mt-2"

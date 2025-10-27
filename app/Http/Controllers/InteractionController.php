@@ -56,6 +56,7 @@ class InteractionController extends Controller
     {
         return Inertia::render('interactions/show', [
             'interaction' => new InteractionResource($interaction),
+            'contacts' => ContactResource::collection($this->contactService->getAll()),
         ]);
     }
 

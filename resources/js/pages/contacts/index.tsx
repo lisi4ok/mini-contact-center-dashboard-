@@ -1,10 +1,11 @@
 import { columns } from "./columns"
-import { type Contact, type BreadcrumbItem } from '@/types';
+import { type Contact, type BreadcrumbItem, type SharedData } from '@/types';
 import { DataTable } from "./data-table"
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { index, create } from '@/routes/contacts';
 import { buttonVariants } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,6 +16,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 export default function ContactIndex({ contacts }: { contacts: Contact[] }) {
+    const { flash } = usePage<SharedData>().props;
+
+    if (flash.success) {
+        toast.success(flash.success);
+    } else if (flash.error) {
+        toast.error(flash.error);
+    }
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Contacts" />

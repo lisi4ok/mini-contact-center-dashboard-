@@ -35,7 +35,7 @@ export default function ShowContact({ contact, interactions }: { contact: Contac
 
                 <div className="space-y-6">
                     <HeadingSmall
-                        title="Show Contact"
+                        title={"Show Contact #" + contact.id}
                         description="Show Contact - name, email address, phone number and company name"
                     />
 
