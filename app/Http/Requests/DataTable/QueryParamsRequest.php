@@ -13,8 +13,8 @@ class QueryParamsRequest extends FormRequest
         return [
             'search'  => ['nullable', 'string'],
             'limit'   => ['nullable', 'integer'],
-            'column'  => ['nullable', 'string'],
-            'sort'    => ['nullable', Rule::enum(Sort::class)],
+            'col'     => ['nullable', 'string'],
+            'sort'    => ['nullable', 'string', 'in:asc,desc'],
             'filters' => ['nullable', 'array'],
         ];
     }

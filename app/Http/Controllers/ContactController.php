@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 use App\Dto\Contact as ContactDto;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use App\Services\ContactService;
 use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -18,65 +17,10 @@ class ContactController extends Controller
     {
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $contactsQuery = Contact::query();
-
-        # Capturing the total count before applying filters
-        $totalCount = $contactsQuery->count();
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-
-            $contactsQuery->where(fn($query) =>
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%")
-                ->orWhere('phone', 'like', "%{$search}%")
-            );
-        }
-
-        # Filtered Count
-        $filteredCount = $contactsQuery->count();
-
-        $perPage = (int) ($request->perPage ?? 10);
-
-        # Fetch All the Records
-        if ($perPage === -1) {
-            $allContacts = $contactsQuery->latest()->get()->map(fn($contact) => [
-                'id'                           => $contact->id,
-                'name'                         => $contact->name,
-                'email'                        => $contact->email,
-                'phone'                        => $contact->phone,
-                'company'                      => $contact->company,
-                'created_at'                   => $contact->created_at->format('d M Y'),
-            ]);
-
-            $contacts = [
-                'data'     => $allContacts,
-                'total'    => $filteredCount,
-                'per_page' => $perPage,
-                'from'     => 1,
-                'to'       => $filteredCount,
-                'links'    => [],
-            ];
-
-        } else {
-            $contacts = $contactsQuery->latest()->paginate($perPage)->withQueryString();
-            $contacts->getCollection()->transform(fn($contact) => [
-                'id'                           => $contact->id,
-                'name'                         => $contact->name,
-                'email'                        => $contact->email,
-                'phone'                        => $contact->phone,
-                'company'                      => $contact->company,
-                'created_at'                   => $contact->created_at->format('d M Y'),
-            ]);
-        }
-
         return Inertia::render('contacts/index', [
-            'contacts'      => $contacts,
-            'filters'       => $request->only(['search', 'perPage']),
-            'totalCount'    => $totalCount,
-            'filteredCount' => $filteredCount,
+            'contacts' => ContactResource::collection($this->contactService->getAll()),
         ]);
     }
 

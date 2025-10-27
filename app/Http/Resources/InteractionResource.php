@@ -15,7 +15,7 @@ class InteractionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            //'id' => $this->id,
+            'id' => $this->id,
             'contact' => $this->contact ?? null,
             'type' => $this->type,
             'timestamp' => $this->timestamp,
