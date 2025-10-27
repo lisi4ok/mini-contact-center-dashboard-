@@ -9,9 +9,6 @@ export default function AppHeaderLayout({
     children,
     breadcrumbs,
 }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {
-
-    if (!breadcrumbs) {}
-
     return (
         <AppShell>
             <AppHeader breadcrumbs={breadcrumbs} />
