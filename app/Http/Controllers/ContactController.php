@@ -5,10 +5,11 @@ use App\Dto\Contact as ContactDto;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Http\Resources\ContactResource;
+use App\Http\Resources\InteractionResource;
 use App\Models\Contact;
+use App\Models\Interaction;
 use App\Services\ContactService;
 use Exception;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ContactController extends Controller
@@ -49,7 +50,10 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        //
+        return Inertia::render('contacts/show', [
+            'contact' => $contact,
+            'interactions' => InteractionResource::collection(Interaction::where('contact_id', $contact->id)->get()),
+        ]);
     }
 
     /**
@@ -57,55 +61,45 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact)
     {
-        //
+        return Inertia::render('contacts/edit', ['contact' => $contact]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateContactRequest $request, Contact $contact)
+    public function update(UpdateContactRequest $request, int $id)
     {
         try {
-            $categoryImagePath = null;
+            $dto = ContactDto::fromArray($request->validated());
+            $updated = $this->contactService->update($id, $dto);
 
-            if ($request->hasFile('image')) {
-                $categoryImagePath = $request->file('image')->store('categories', 'public');
+            if ($updated) {
+                return redirect()->route('contacts.index')->with('success', 'Contact updated successfully.');
             }
 
-            $category->name        = $request->name;
-            $category->slug        = Str::slug($request->name);
-            $category->description = $request->description;
-
-            if ($categoryImagePath) {
-                $category->image = $categoryImagePath;
-            }
-
-            $category->save();
-
-            if ($category) {
-                return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
-            }
-
-            return redirect()->back()->with('error', 'Unable to update category. Please try again.');
+            return redirect()->back()->with('error', 'Unable to update Contact. Please try again.');
 
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update category');
+            return redirect()->back()->with('error', 'Failed to update Contact');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Contact $contact)
+    public function destroy(int $id)
     {
         try {
-            if ($contact) {
-                $contact->delete();
-                return redirect()->route('contacts.index')->with('success', 'Category deleted successfully.');
+            $deleted = $this->contactService->delete($id);
+
+            if ($deleted) {
+                return redirect()->route('contacts.index')->with('success', 'Contact deleted successfully.');
             }
 
+            return redirect()->back()->with('error', 'Unable to delete Contact. Please try again.');
+
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to delete category');
+            return redirect()->back()->with('error', 'Failed to delete Contact');
         }
     }
 }

@@ -8,17 +8,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
-import { create } from '@/routes/contacts';
+import { Contact } from '@/types';
+import { index } from '@/routes/contacts';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Create Contact',
-        href: create().url,
+        title: 'Contacts',
+        href: index().url,
     },
 ];
 
-export default function ContactCreate() {
 
+export default function EditContact({ contact }: { contact: Contact }) {
+    console.log(contact)
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Contact" />
@@ -32,7 +34,7 @@ export default function ContactCreate() {
                     />
 
                     <Form
-                        {...ContactController.store.form()}
+                        {...ContactController.update.form({ contact: contact.id })}
                         options={{
                             preserveScroll: true,
                         }}
@@ -52,6 +54,7 @@ export default function ContactCreate() {
                                         autoFocus
                                         tabIndex={1}
                                         placeholder="Full name"
+                                        defaultValue={contact.name}
                                     />
 
                                     <InputError
@@ -72,6 +75,7 @@ export default function ContactCreate() {
                                         autoFocus
                                         tabIndex={2}
                                         placeholder="Email address"
+                                        defaultValue={contact.email}
                                     />
 
                                     <InputError
@@ -93,6 +97,7 @@ export default function ContactCreate() {
                                         autoFocus
                                         tabIndex={3}
                                         placeholder="Phone Number"
+                                        defaultValue={contact.phone}
                                     />
 
                                     <InputError
@@ -112,6 +117,7 @@ export default function ContactCreate() {
                                         autoFocus
                                         tabIndex={4}
                                         placeholder="Company Name"
+                                        defaultValue={contact.company}
                                     />
 
                                     <InputError
@@ -120,13 +126,12 @@ export default function ContactCreate() {
                                     />
                                 </div>
 
-
                                 <div className="flex items-center gap-4">
                                     <Button
                                         disabled={processing}
-                                        data-test="create-button"
+                                        data-test="update-button"
                                     >
-                                        Create
+                                        Update
                                     </Button>
 
                                     <Transition

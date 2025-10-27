@@ -12,6 +12,5 @@ enum InteractionTypes: string
     case HOVER = 'hover';
     case SCROLL = 'scroll';
     case KEYBOARD = 'keyboard';
-    case DRAG_AND_DROP = 'drag and drop';
     case SWIPE  = 'swipe';
 }

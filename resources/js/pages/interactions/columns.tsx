@@ -8,14 +8,14 @@ import {
 } from 'lucide-react';
 import * as React from 'react';
 import { Checkbox } from "@/components/ui/checkbox"
-import { edit, show } from '@/routes/contacts';
+import { edit, show } from '@/routes/interactions';
 import { Link } from '@inertiajs/react';
 import { toast } from 'sonner';
-import ContactController from '@/actions/App/Http/Controllers/ContactController';
+import InteractionController from '@/actions/App/Http/Controllers/InteractionController';
 
-const deleteContact = (id: number) => {
+const deleteInteraction = (id: number) => {
     if (confirm('Are you sure you want to delete this contact?')) {
-        ContactController.destroy({ contact: id})
+        InteractionController.destroy({ interaction: id})
         toast("Contact deleted successfully");
     }
 }
@@ -44,14 +44,14 @@ export const columns: ColumnDef<Contact>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "name",
+        accessorKey: "type",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Name
+                    Type
                     {column.getIsSorted() === "desc" ? (
                         <ArrowDown />
                     ) : column.getIsSorted() === "asc" ? (
@@ -62,17 +62,17 @@ export const columns: ColumnDef<Contact>[] = [
                 </Button>
             )
         },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
+        cell: ({ row }) => <div className="lowercase">{row.getValue("type")}</div>,
     },
     {
-        accessorKey: "email",
+        accessorKey: "note",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Email
+                    Note
                     {column.getIsSorted() === "desc" ? (
                         <ArrowDown />
                     ) : column.getIsSorted() === "asc" ? (
@@ -83,64 +83,22 @@ export const columns: ColumnDef<Contact>[] = [
                 </Button>
             )
         },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-    },
-    {
-        accessorKey: "phone",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Phone
-                    {column.getIsSorted() === "desc" ? (
-                        <ArrowDown />
-                    ) : column.getIsSorted() === "asc" ? (
-                        <ArrowUp />
-                    ) : (
-                        <ArrowUpDown />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
-    },
-    {
-        accessorKey: "company",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Company
-                    {column.getIsSorted() === "desc" ? (
-                        <ArrowDown />
-                    ) : column.getIsSorted() === "asc" ? (
-                        <ArrowUp />
-                    ) : (
-                        <ArrowUpDown />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("company")}</div>,
+        cell: ({ row }) => <div className="w-1"><div className="lowercase">{row.getValue("note")}</div></div>,
     },
     {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
-            const contact = row.original
+            const interaction = row.original
 
             return (
                 <>
-                <Link href={show({ contact: contact }).url}
+                <Link href={show({ interaction: interaction }).url}
                       className={buttonVariants({ variant: 'default' })}>
                     Show
                 </Link>
                 <Link
-                    href={edit({ contact: contact }).url}
+                    href={edit({ interaction: interaction }).url}
                     className={buttonVariants({ variant: 'secondary' })}
                 >
                     Edit
@@ -148,7 +106,7 @@ export const columns: ColumnDef<Contact>[] = [
                 <Button
                     variant="destructive"
                     className={'cusor-pointer'}
-                    onClick={() => deleteContact(contact.id)}
+                    onClick={() => deleteInteraction(interaction.id)}
                 >
                     Delete
                 </Button>

@@ -1,5 +1,5 @@
-import ContactController from '@/actions/App/Http/Controllers/ContactController';
-import { type BreadcrumbItem } from '@/types';
+import InteractionController from '@/actions/App/Http/Controllers/InteractionController';
+import { type BreadcrumbItem, Contact } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Form, Head,} from '@inertiajs/react';
 import HeadingSmall from '@/components/heading-small';
@@ -9,7 +9,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import { create } from '@/routes/contacts';
-
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import * as React from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Create Contact',
@@ -17,8 +26,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function ContactCreate() {
-
+export default function CreateInteraction({ contacts }: { contacts: Contact[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Contact" />
@@ -32,7 +40,7 @@ export default function ContactCreate() {
                     />
 
                     <Form
-                        {...ContactController.store.form()}
+                        {...InteractionController.store.form()}
                         options={{
                             preserveScroll: true,
                         }}
@@ -41,85 +49,71 @@ export default function ContactCreate() {
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="name">Name</Label>
-
-                                    <Input
-                                        id="name"
-                                        type="text"
-                                        className="mt-1 block w-full"
-                                        name="name"
-                                        required
-                                        autoFocus
-                                        tabIndex={1}
-                                        placeholder="Full name"
-                                    />
+                                    <Label htmlFor="name">Contact</Label>
+                                    <Select name="contact_id">
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Select a Contact" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Contact</SelectLabel>
+                                                {contacts.length && contacts.map( (contact: Contact) =>
+                                                        <SelectItem value={contact.id}>{contact.name}</SelectItem>
+                                                )}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
 
                                     <InputError
                                         className="mt-2"
-                                        message={errors.name}
+                                        message={errors.contact_id}
                                     />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">Email address</Label>
+                                    <Label htmlFor="type">type</Label>
 
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        className="mt-1 block w-full"
-                                        name="email"
-                                        required
-                                        autoFocus
-                                        tabIndex={2}
-                                        placeholder="Email address"
-                                    />
+                                    <Select name="type">
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Select a Type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Type</SelectLabel>
+                                                <SelectItem value="click">Click</SelectItem>
+                                                <SelectItem value="hover">Hover</SelectItem>
+                                                <SelectItem value="scroll">Scroll</SelectItem>
+                                                <SelectItem value="keyboard">Keyboard</SelectItem>
+                                                <SelectItem value="swipe">Swipe</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
 
                                     <InputError
                                         className="mt-2"
-                                        message={errors.email}
+                                        message={errors.type}
                                     />
                                 </div>
 
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="phone">Phone</Label>
+                                    <Label htmlFor="note">Note</Label>
 
                                     <Input
-                                        id="phone"
+                                        id="note"
                                         type="text"
                                         className="mt-1 block w-full"
-                                        name="phone"
-                                        required
+                                        name="note"
                                         autoFocus
                                         tabIndex={3}
-                                        placeholder="Phone Number"
+                                        placeholder="Note"
                                     />
 
                                     <InputError
                                         className="mt-2"
-                                        message={errors.phone}
+                                        message={errors.note}
                                     />
                                 </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="company">Company</Label>
-
-                                    <Input
-                                        id="company"
-                                        type="text"
-                                        className="mt-1 block w-full"
-                                        name="company"
-                                        autoFocus
-                                        tabIndex={4}
-                                        placeholder="Company Name"
-                                    />
-
-                                    <InputError
-                                        className="mt-2"
-                                        message={errors.company}
-                                    />
-                                </div>
-
 
                                 <div className="flex items-center gap-4">
                                     <Button

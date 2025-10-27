@@ -19,9 +19,9 @@ class InteractionFactory extends Factory
     public function definition(): array
     {
         return [
-            'contact_id' => Contact::factory(),
+            'contact_id' => Contact::factory()->create()->id,
             'type' => fake()->randomElement(InteractionTypes::values()),
-            'note' => fake()->text(),
+            'note' => fake()->words(nb: rand(1, 3), asText: true),
             'timestamp' => fake()->dateTime(),
         ];
     }

@@ -25,6 +25,9 @@ trait ContactValidationRules
                 'phone:' . config('app.phone_countries'),
             ],
             'company' => ['nullable', 'string', 'max:255'],
+//            'interactions' => ['nullable', 'array'],
+//            'interactions.type' => ['nullable', 'in:click,hover,scroll,keyboard,swipe'],
+//            'interactions.note' => ['nullable', 'string'],
         ];
     }
 }

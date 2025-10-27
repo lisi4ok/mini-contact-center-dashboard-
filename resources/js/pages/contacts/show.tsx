@@ -1,44 +1,54 @@
 import ContactController from '@/actions/App/Http/Controllers/ContactController';
-import { type BreadcrumbItem } from '@/types';
-import { Transition } from '@headlessui/react';
+import { type BreadcrumbItem, type Interaction, type Contact } from '@/types';
 import { Form, Head,} from '@inertiajs/react';
 import HeadingSmall from '@/components/heading-small';
 import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
-import { create } from '@/routes/contacts';
+import { index } from '@/routes/contacts';
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Create Contact',
-        href: create().url,
+        title: 'Contacts',
+        href: index().url,
     },
 ];
 
-export default function ContactCreate() {
+
+export default function EditContact({ contact, interactions }: { contact: Contact, interactions: Interaction[] }) {
+
+    console.log(interactions)
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Contact" />
+            <Head title="Show Contact" />
 
             <div className="w-full max-w-xl px-4 py-6">
 
                 <div className="space-y-6">
                     <HeadingSmall
-                        title="Create Contact"
-                        description="Create Contact - name, email address, phone number and company name"
+                        title="Show Contact"
+                        description="Show Contact - name, email address, phone number and company name"
                     />
 
                     <Form
-                        {...ContactController.store.form()}
+                        {...ContactController.update.form({contact: contact.id})}
                         options={{
                             preserveScroll: true,
                         }}
                         className="space-y-6"
                     >
-                        {({ processing, recentlySuccessful, errors }) => (
+                        {({ errors }) => (
                             <>
                                 <div className="grid gap-2">
                                     <Label htmlFor="name">Name</Label>
@@ -52,6 +62,8 @@ export default function ContactCreate() {
                                         autoFocus
                                         tabIndex={1}
                                         placeholder="Full name"
+                                        value={contact.name}
+                                        disabled
                                     />
 
                                     <InputError
@@ -72,6 +84,8 @@ export default function ContactCreate() {
                                         autoFocus
                                         tabIndex={2}
                                         placeholder="Email address"
+                                        value={contact.email}
+                                        disabled
                                     />
 
                                     <InputError
@@ -93,6 +107,8 @@ export default function ContactCreate() {
                                         autoFocus
                                         tabIndex={3}
                                         placeholder="Phone Number"
+                                        value={contact.phone}
+                                        disabled
                                     />
 
                                     <InputError
@@ -112,6 +128,8 @@ export default function ContactCreate() {
                                         autoFocus
                                         tabIndex={4}
                                         placeholder="Company Name"
+                                        value={contact.company}
+                                        disabled
                                     />
 
                                     <InputError
@@ -122,24 +140,25 @@ export default function ContactCreate() {
 
 
                                 <div className="flex items-center gap-4">
-                                    <Button
-                                        disabled={processing}
-                                        data-test="create-button"
-                                    >
-                                        Create
-                                    </Button>
-
-                                    <Transition
-                                        show={recentlySuccessful}
-                                        enter="transition ease-in-out"
-                                        enterFrom="opacity-0"
-                                        leave="transition ease-in-out"
-                                        leaveTo="opacity-0"
-                                    >
-                                        <p className="text-sm text-neutral-600">
-                                            Saved
-                                        </p>
-                                    </Transition>
+                                    <Table>
+                                        <TableCaption>A list of your interactions.</TableCaption>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead className="w-[100px]">Interaction Type</TableHead>
+                                                <TableHead>Note</TableHead>
+                                                <TableHead className="text-right">Timestamp</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {interactions.map((interaction) => (
+                                                <TableRow key={interaction.id}>
+                                                    <TableCell className="font-medium">{interaction.type}</TableCell>
+                                                    <TableCell>{interaction.note}</TableCell>
+                                                    <TableCell className="text-right"></TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
                                 </div>
                             </>
                         )}

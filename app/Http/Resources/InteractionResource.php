@@ -16,7 +16,7 @@ class InteractionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'contact' => $this->contact ?? null,
+            'contact' => $this->whenLoaded('contact', fn() => new ContactResource($this->contact)),
             'type' => $this->type,
             'timestamp' => $this->timestamp,
             'note' => $this->note ?? null,

@@ -29,7 +29,8 @@ import {
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { cn, isSameUrl, resolveUrl } from '@/lib/utils';
-import { dashboard } from '@/routes';
+import { index as contactsIndex } from '@/routes/contacts';
+import { index as interactionsIndex } from '@/routes/interactions';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { LayoutGrid, Menu, Search } from 'lucide-react';
@@ -38,8 +39,13 @@ import AppLogoIcon from './app-logo-icon';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
-        href: dashboard(),
+        title: 'Contacts',
+        href: contactsIndex().url,
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Interactions',
+        href: interactionsIndex().url,
         icon: LayoutGrid,
     },
 ];
@@ -129,7 +135,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                     </div>
 
                     <Link
-                        href={dashboard()}
+                        href={contactsIndex().url}
                         prefetch
                         className="flex items-center space-x-2"
                     >

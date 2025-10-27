@@ -51,6 +51,10 @@ php artisn key:generate
 ```
 
 ```
+php artisan wayfinder:generate --with-form
+```
+
+```
 php artisan storage:link
 ```
 
