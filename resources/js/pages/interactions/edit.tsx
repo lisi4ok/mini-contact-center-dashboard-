@@ -1,5 +1,5 @@
-import ContactController from '@/actions/App/Http/Controllers/ContactController';
-import { type BreadcrumbItem } from '@/types';
+import InteractionController from '@/actions/App/Http/Controllers/InteractionController';
+import { type BreadcrumbItem, type Contact,  type Interaction } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Form, Head,} from '@inertiajs/react';
 import HeadingSmall from '@/components/heading-small';
@@ -8,33 +8,43 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
-import { Contact } from '@/types';
-import { index } from '@/routes/contacts';
-
+import { create } from '@/routes/contacts';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import * as React from 'react';
+import { useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Contacts',
-        href: index().url,
+        title: 'Edit Interaction',
+        href: create().url,
     },
 ];
 
+export default function EditInteraction({ contacts, interaction }: { contacts: Contact[], interaction: Interaction }) {
+    const [contact, setContact] = useState(interaction.contact_id.toString());
+    const [type, setType] = useState(interaction.type);
 
-export default function EditContact({ contact }: { contact: Contact }) {
-    console.log(contact)
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Contact" />
+            <Head title="Edit Interaction" />
 
             <div className="w-full max-w-xl px-4 py-6">
 
                 <div className="space-y-6">
                     <HeadingSmall
-                        title="Create Contact"
-                        description="Create Contact - name, email address, phone number and company name"
+                        title="Edit Interaction"
+                        description="Edit Interaction - type, note contact"
                     />
 
                     <Form
-                        {...ContactController.update.form({ contact: contact.id })}
+                        {...InteractionController.update.form({ interaction: interaction.id })}
                         options={{
                             preserveScroll: true,
                         }}
@@ -43,86 +53,79 @@ export default function EditContact({ contact }: { contact: Contact }) {
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="name">Name</Label>
-
-                                    <Input
-                                        id="name"
-                                        type="text"
-                                        className="mt-1 block w-full"
-                                        name="name"
-                                        required
-                                        autoFocus
-                                        tabIndex={1}
-                                        placeholder="Full name"
-                                        defaultValue={contact.name}
-                                    />
+                                    <Label htmlFor="name">Contact</Label>
+                                    <Select name="contact_id"
+                                            value={contact}
+                                            onValueChange={(value) => {
+                                                setContact(value);
+                                            }}
+                                    >
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Select a Contact" defaultValue={interaction.contact_id} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Contact</SelectLabel>
+                                                {contacts.length && contacts.map((contact: Contact) =>
+                                                    <SelectItem value={contact.id.toString()}>{contact.name}</SelectItem>
+                                                )}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
 
                                     <InputError
                                         className="mt-2"
-                                        message={errors.name}
+                                        message={errors.contact_id}
                                     />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">Email address</Label>
-
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        className="mt-1 block w-full"
-                                        name="email"
-                                        required
-                                        autoFocus
-                                        tabIndex={2}
-                                        placeholder="Email address"
-                                        defaultValue={contact.email}
-                                    />
+                                    <Label htmlFor="type">type</Label>
+                                    <Select name="type"
+                                            value={type}
+                                            onValueChange={(value) => {
+                                                setType(value);
+                                            }}
+                                    >
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Select a Type" defaultValue={interaction.type} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Type</SelectLabel>
+                                                <SelectItem value="click">Click</SelectItem>
+                                                <SelectItem value="hover">Hover</SelectItem>
+                                                <SelectItem value="scroll">Scroll</SelectItem>
+                                                <SelectItem value="keyboard">Keyboard</SelectItem>
+                                                <SelectItem value="swipe">Swipe</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
 
                                     <InputError
                                         className="mt-2"
-                                        message={errors.email}
+                                        message={errors.type}
                                     />
                                 </div>
 
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="phone">Phone</Label>
+                                    <Label htmlFor="note">Note</Label>
 
                                     <Input
-                                        id="phone"
+                                        id="note"
                                         type="text"
                                         className="mt-1 block w-full"
-                                        name="phone"
-                                        required
+                                        name="note"
                                         autoFocus
                                         tabIndex={3}
-                                        placeholder="Phone Number"
-                                        defaultValue={contact.phone}
+                                        placeholder="Note"
+                                        defaultValue={interaction.note}
                                     />
 
                                     <InputError
                                         className="mt-2"
-                                        message={errors.phone}
-                                    />
-                                </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="company">Company</Label>
-
-                                    <Input
-                                        id="company"
-                                        type="text"
-                                        className="mt-1 block w-full"
-                                        name="company"
-                                        autoFocus
-                                        tabIndex={4}
-                                        placeholder="Company Name"
-                                        defaultValue={contact.company}
-                                    />
-
-                                    <InputError
-                                        className="mt-2"
-                                        message={errors.company}
+                                        message={errors.note}
                                     />
                                 </div>
 

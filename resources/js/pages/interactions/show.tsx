@@ -25,7 +25,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 
-export default function EditContact({ contact, interactions }: { contact: Contact, interactions: Interaction[] }) {
+export default function ShowInteraction({ contact, interactions }: { contact: Contact, interactions: Interaction[] }) {
 
     console.log(interactions)
 

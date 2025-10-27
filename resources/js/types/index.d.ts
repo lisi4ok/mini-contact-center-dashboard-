@@ -66,7 +66,7 @@ export interface Contact {
 
 export interface Interaction {
     id: number;
-    contact: Contact;
+    contact_id: number;
     type: string;
     note?: string;
     timestamp: Date|string;

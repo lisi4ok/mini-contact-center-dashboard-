@@ -12,7 +12,7 @@ trait InteractionValidationRules
     public function rules(): array
     {
         return [
-            'contact_id' => ['required', 'integer'],
+            'contact_id' => ['required', 'numeric:'],
             'type' => ['nullable', 'in:click,hover,scroll,keyboard,swipe'],
             'note' => ['nullable', 'string'],
         ];

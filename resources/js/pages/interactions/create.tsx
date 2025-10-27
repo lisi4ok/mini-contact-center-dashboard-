@@ -29,14 +29,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function CreateInteraction({ contacts }: { contacts: Contact[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Contact" />
+            <Head title="Create Interaction" />
 
             <div className="w-full max-w-xl px-4 py-6">
 
                 <div className="space-y-6">
                     <HeadingSmall
-                        title="Create Contact"
-                        description="Create Contact - name, email address, phone number and company name"
+                        title="Create Interaction"
+                        description="Create Interaction - type, note contact"
                     />
 
                     <Form
@@ -57,8 +57,8 @@ export default function CreateInteraction({ contacts }: { contacts: Contact[] })
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Contact</SelectLabel>
-                                                {contacts.length && contacts.map( (contact: Contact) =>
-                                                        <SelectItem value={contact.id}>{contact.name}</SelectItem>
+                                                {contacts.length && contacts.map((contact: Contact) =>
+                                                    <SelectItem value={contact.id.toString()}>{contact.name}</SelectItem>
                                                 )}
                                             </SelectGroup>
                                         </SelectContent>

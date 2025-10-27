@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Dto\Contact as ContactDto;
+use App\Enums\InteractionTypes;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Http\Resources\ContactResource;

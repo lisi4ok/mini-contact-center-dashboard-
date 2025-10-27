@@ -55,7 +55,7 @@ class InteractionController extends Controller
     public function show(Interaction $interaction)
     {
         return Inertia::render('interactions/show', [
-            'interaction' => $interaction,
+            'interaction' => new InteractionResource($interaction),
         ]);
     }
 
@@ -65,6 +65,7 @@ class InteractionController extends Controller
     public function edit(Interaction $interaction)
     {
         return Inertia::render('interactions/edit', [
+            'interaction' => new InteractionResource($interaction),
             'contacts' => ContactResource::collection($this->contactService->getAll()),
         ]);
     }

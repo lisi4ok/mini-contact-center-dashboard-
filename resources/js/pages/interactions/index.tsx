@@ -20,7 +20,7 @@ export default function InteractionIndex({ interactions }: { interactions: Inter
             <div className="container mx-auto py-10">
                 <div className={'mt-8'}>
                     <Link className={buttonVariants({ variant: 'outline' })} href={create().url}>
-                        Create Contact
+                        Create Interaction
                     </Link>
                 </div>
                 <DataTable columns={columns} data={interactions} />

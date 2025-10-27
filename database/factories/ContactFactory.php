@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\InteractionTypes;
+use App\Models\Contact;
+use App\Models\Interaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
