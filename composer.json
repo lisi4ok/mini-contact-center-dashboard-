@@ -13,18 +13,22 @@
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/fortify": "^1.30",
         "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
-        "laravel/wayfinder": "^0.1.9"
+        "laravel/wayfinder": "^0.1.9",
+        "propaganistas/laravel-phone": "^6.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.7",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.18",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "^4.1",
-        "pestphp/pest-plugin-laravel": "^4.0"
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "rector/rector": "^2.2"
     },
     "autoload": {
         "psr-4": {
@@ -59,6 +63,25 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
+        ],
+        "lint": [
+            "rector",
+            "pint --parallel",
+            "npm run lint"
+        ],
+        "test:type-coverage": "pest --type-coverage --min=100",
+        "test:lint": [
+            "pint --parallel --test",
+            "rector --dry-run",
+            "npm run test:lint"
+        ],
+        "test:unit": "pest --parallel --coverage --exactly=100.0",
+        "test:types": "phpstan",
+        "test:all": [
+            "@test:type-coverage",
+            "@test:unit",
+            "@test:lint",
+            "@test:types"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
